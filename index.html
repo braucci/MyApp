@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVIONICA // Strumenti &amp; Codice — Prof. Ing. Biagio Raucci</title>
+<meta name="description" content="Portale dei lavori di programmazione del Prof. Ing. Biagio Raucci — applicazioni e web app per la didattica delle Costruzioni Aeronautiche, ITIS E. Majorana, Cassino.">
+<style>
+:root {
+  --bg:#0b0f14;--bg-elev:#111824;--bg-card:#0e1622;
+  --grid:rgba(0,212,255,.05);--line:rgba(0,212,255,.18);
+  --line-soft:rgba(255,255,255,.06);
+  --text:#e8eef5;--text-dim:#8a98ab;--text-faint:#5a6878;
+  --accent:#00d4ff;--accent-2:#ff6b35;--success:#00e676;--warn:#ffd600;
+  --radius:2px;--radius-lg:4px;
+  --mono:'JetBrains Mono','Fira Code','SF Mono',Consolas,monospace;
+  --display:'Space Grotesk','Inter',system-ui,sans-serif;
+  --body:'Inter',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--bg);color:var(--text);
+  line-height:1.6;min-height:100vh;overflow-x:hidden;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:48px 48px;background-position:-1px -1px}
+.topbar{border-bottom:1px solid var(--line);background:rgba(11,15,20,.85);
+  backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.topbar-inner{max-width:1280px;margin:0 auto;padding:14px 28px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  font-family:var(--mono);font-size:11px;color:var(--text-dim);
+  letter-spacing:.08em;text-transform:uppercase}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.dot{width:8px;height:8px;background:var(--success);border-radius:50%;
+  box-shadow:0 0 10px var(--success);animation:pulse 2s ease-in-out infinite}
+.topbar-right{color:var(--accent)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero{max-width:1280px;margin:0 auto;padding:70px 28px 44px;
+  animation:fadeUp .8s ease-out .05s backwards}
+.tag{font-family:var(--mono);font-size:11px;color:var(--accent);
+  letter-spacing:.2em;text-transform:uppercase;margin-bottom:22px;
+  display:flex;align-items:center;gap:10px}
+.tag::before{content:'//';color:var(--text-faint)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,4.5vw,3.6rem);
+  line-height:1.05;letter-spacing:-.02em;margin-bottom:20px;max-width:24ch}
+.gradient{background:linear-gradient(120deg,var(--accent) 0%,var(--accent-2) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{font-size:1.05rem;color:var(--text-dim);max-width:72ch;margin-bottom:32px}
+.subtitle strong{color:var(--text);font-weight:600}
+.hero-meta{display:flex;gap:36px;flex-wrap:wrap;font-family:var(--mono);
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint)}
+.hero-meta strong{display:block;color:var(--text);font-weight:600;margin-top:4px;font-size:14px}
+.hero-meta strong .a{color:var(--accent)}
+.section{max-width:1280px;margin:0 auto;padding:46px 28px}
+.section-head{display:flex;align-items:baseline;gap:20px;margin-bottom:12px;
+  padding-bottom:16px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.section-head .num{font-family:var(--mono);font-size:12px;
+  color:var(--accent);letter-spacing:.15em}
+.section-head .num::after{content:' //';color:var(--text-faint)}
+.section-head h2{font-family:var(--display);font-weight:600;font-size:1.8rem;letter-spacing:-.01em}
+.section-lead{font-size:.95rem;color:var(--text-dim);max-width:78ch;margin-bottom:28px}
+.works{display:flex;flex-direction:column;gap:14px}
+.work{background:var(--bg-card);border:1px solid var(--line-soft);
+  border-radius:var(--radius-lg);overflow:hidden;transition:border-color .3s}
+.work:hover{border-color:var(--line)}
+.work.open{border-color:var(--accent)}
+.work.app.open{border-color:var(--accent-2)}
+.work-header{display:flex;align-items:center;gap:18px;padding:20px 26px;
+  cursor:pointer;user-select:none;transition:background .2s}
+.work-header:hover{background:rgba(0,212,255,.03)}
+.work.app .work-header:hover{background:rgba(255,107,53,.03)}
+.work-code{font-family:var(--mono);font-size:11px;color:var(--accent);
+  letter-spacing:.15em;text-transform:uppercase;min-width:80px}
+.work.app .work-code{color:var(--accent-2)}
+.work-title{flex:1;font-family:var(--display);font-weight:600;font-size:1.1rem;letter-spacing:-.01em}
+.work-tech{font-family:var(--mono);font-size:10px;color:var(--text-faint);letter-spacing:.08em}
+.work-status{font-family:var(--mono);font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;padding:3px 9px;border-radius:var(--radius);
+  border:1px solid currentColor;white-space:nowrap}
+.work-status.web{color:var(--accent)}
+.work-status.app{color:var(--accent-2)}
+.work-toggle{font-family:var(--mono);font-size:20px;color:var(--accent);
+  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);border-radius:var(--radius);
+  transition:transform .3s,background .3s;flex-shrink:0}
+.work.app .work-toggle{color:var(--accent-2)}
+.work.open .work-toggle{transform:rotate(45deg);background:rgba(0,212,255,.1)}
+.work.app.open .work-toggle{background:rgba(255,107,53,.1)}
+.work-body{max-height:0;overflow:hidden;transition:max-height .5s ease}
+.work.open .work-body{max-height:1800px}
+.work-body-inner{padding:6px 26px 28px;border-top:1px solid var(--line-soft)}
+.work-block{padding:18px 0;border-bottom:1px solid var(--line-soft);
+  display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:start}
+.work-block:last-of-type{border-bottom:none}
+.bl{font-family:var(--mono);font-size:11px;color:var(--text-faint);
+  letter-spacing:.15em;text-transform:uppercase;padding-top:2px}
+.bl .m{color:var(--accent)}
+.work.app .bl .m{color:var(--accent-2)}
+.bt{font-size:.95rem;color:var(--text-dim)}
+.bt strong{color:var(--text);font-weight:600}
+.bt em{color:var(--text);font-style:italic}
+.bt code{font-family:var(--mono);font-size:.83em;color:var(--accent);
+  background:rgba(0,212,255,.07);padding:1px 5px;border-radius:var(--radius)}
+.work.app .bt code{color:var(--accent-2);background:rgba(255,107,53,.07)}
+.work-topics{padding:16px 0 2px;display:flex;flex-wrap:wrap;gap:7px}
+.work-topics span{padding:2px 8px;border:1px solid var(--line);border-radius:var(--radius);
+  font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.05em}
+.work.app .work-topics span{color:var(--accent-2);border-color:rgba(255,107,53,.3)}
+.work-cta{display:flex;align-items:center;gap:16px;margin-top:20px;padding:16px 22px;
+  background:linear-gradient(90deg,rgba(0,212,255,.08),rgba(0,212,255,.02));
+  border:1px solid rgba(0,212,255,.3);border-left:3px solid var(--accent);
+  border-radius:var(--radius-lg);text-decoration:none;color:inherit;transition:all .25s}
+.work.app .work-cta{background:linear-gradient(90deg,rgba(255,107,53,.08),rgba(255,107,53,.02));
+  border-color:rgba(255,107,53,.3);border-left-color:var(--accent-2)}
+.work-cta:hover{transform:translateY(-1px);border-color:var(--accent)}
+.work.app .work-cta:hover{border-color:var(--accent-2)}
+.work-cta:hover .ca{transform:translateX(4px)}
+.ci{font-size:20px;line-height:1}.ct{flex:1}
+.cl{font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:2px}
+.work.app .cl{color:var(--accent-2)}
+.cu{font-family:var(--mono);font-size:12px;color:var(--text);word-break:break-all}
+.ca{font-family:var(--mono);font-size:18px;color:var(--accent);transition:transform .25s}
+.work.app .ca{color:var(--accent-2)}
+footer{max-width:1280px;margin:60px auto 0;padding:28px 28px 44px;
+  border-top:1px solid var(--line-soft);display:flex;justify-content:space-between;
+  align-items:center;gap:20px;flex-wrap:wrap;font-family:var(--mono);
+  font-size:11px;color:var(--text-faint);letter-spacing:.1em;text-transform:uppercase}
+footer .a{color:var(--accent)}
+@media(max-width:900px){.work-block{grid-template-columns:1fr;gap:6px}.work-tech{display:none}}
+@media(max-width:560px){
+  .topbar-inner{padding:12px 18px}.topbar-right{display:none}
+  .hero{padding:38px 18px 26px}.section{padding:32px 18px}
+  .work-header{padding:16px 18px;gap:10px}.work-body-inner{padding:6px 18px 22px}
+  .work-status{display:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fi{animation:fadeUp .6s ease-out backwards}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-left">
+      <span class="dot"></span>
+      <span>SYS · ONLINE</span>
+      <span>// SUITE STRUMENTI</span>
+    </div>
+    <div class="topbar-right">ITIS E. MAJORANA · CASSINO</div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="tag">Repository strumenti · Prof. Ing. Biagio Raucci</div>
+  <h1>Strumenti &amp; <span class="gradient">Codice</span><br>per il volo e per l'aula</h1>
+  <p class="subtitle">
+    Raccolta sistematica delle <strong>applicazioni e web app</strong> che
+    sviluppo per la didattica delle Costruzioni Aeronautiche e che metto a
+    disposizione degli studenti. Apri una scheda per leggere cosa fa il
+    programma, a cosa serve e raggiungere il link diretto.
+  </p>
+  <div class="hero-meta">
+    <div>Lavori catalogati<strong><span class="a">35</span></strong></div>
+    <div>Web app online<strong>31</strong></div>
+    <div>App desktop native<strong>04</strong></div>
+    <div>A.S.<strong>2025/26</strong></div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="section-head">
+    <span class="num">01</span>
+    <h2>Strutture aeronautiche</h2>
+  </div>
+  <p class="section-lead">Calcolatori e visualizzatori per il dimensionamento strutturale dell'ala: sollecitazioni, longheroni, aste di controventatura, sezioni resistenti e profili NACA.</p>
+  <div class="works">
+    <article class="work web open fi" style="animation-delay:0.07s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 01</div>
+        <div class="work-title">Wing Explorer — strutture alari 3D</div>
+        <div class="work-tech">HTML · JS · Three.js</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Dato un profilo NACA a 4 cifre, traccia la geometria 2D (linea media e spessore secondo la <code>y_t = 5t[0.2969√x − 0.126x − 0.3516x² + 0.2843x³ − 0.1036x⁴]</code>) e ricostruisce in assonometria la struttura alare 3D completa (centine, longheroni, correnti, rivestimento) con orbit controls e vista esplosa. Calcola <code>t/c</code>, <code>A/c²</code> e <code>I_x/c⁴</code>.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Mostrare il legame tra forma del profilo e proprietà strutturali. Configurazione mono/bi-longherone, corda di radice/estremità, semi-apertura e numero di centine: si leggono all'istante apertura, <code>S</code>, allungamento <code>AR</code> e rastremazione <code>λ</code>.</div>
+          </div>
+          <div class="work-topics"><span>NACA 4 cifre</span><span>Struttura 3D</span><span>Centine &amp; longheroni</span><span>I_x/c⁴</span><span>AR · λ · S</span><span>Three.js</span></div>
+          <a class="work-cta" href="https://braucci.github.io/wing-explorer/" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">braucci.github.io/wing-explorer/</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.13s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 02</div>
+        <div class="work-title">Analisi sollecitazioni semiala</div>
+        <div class="work-tech">HTML · JS · Canvas</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Tre schemi strutturali — ala controventata a carico uniforme, ala a sbalzo con motore (sovrapposizione degli effetti), ala rastremata con portanza trapezoidale. Calcola e traccia in tempo reale i diagrammi <code>T(x)</code> (taglio), <code>M_f(x)</code> (momento flettente) e <code>N(x)</code> (sforzo normale) lungo l'apertura alare.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Visualizzare come la distribuzione delle sollecitazioni cambia al variare della configurazione strutturale e del tipo di carico — confronto diretto tra ala controventata e sbalzo puro.</div>
+          </div>
+          <div class="work-topics"><span>Taglio T(x)</span><span>Momento flettente Mf(x)</span><span>Sforzo normale N(x)</span><span>Sovrapposizione effetti</span><span>Ala rastremata</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/sollecitazioni.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/sollecitazioni.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.19s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 03</div>
+        <div class="work-title">Dimensionamento longherone</div>
+        <div class="work-tech">HTML · JS</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Dimensionamento a robustezza con metodo della forza concentrata. Input: geometria alare (<code>W</code>, <code>S</code>, <code>b</code>, <code>λ</code>), fattore di carico <code>n</code>, posizione e profilo del longherone, materiale (Ergal 7075, Avional 2024, personalizzato). Calcola momento flettente alla sezione, area minima delle solette e tensioni con fattore di sicurezza. Stima peso ala tramite formula di Gabrielli.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Percorrere il ciclo progettuale completo — dalla definizione dei carichi al dimensionamento della sezione resistente — con stima del peso ala tramite formula di Gabrielli o percentuale del peso totale.</div>
+          </div>
+          <div class="work-topics"><span>Forza concentrata</span><span>Carichi di progetto</span><span>Solette &amp; anima</span><span>Ergal · Avional</span><span>Formula Gabrielli</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/dimensionamento_longherone.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/dimensionamento_longherone.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.25s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 04</div>
+        <div class="work-title">Asta di controventatura — dimensionamento euleriano</div>
+        <div class="work-tech">HTML · JS</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Dimensionamento euleriano con ricerca numerica iterativa a convergenza. Input: carichi <code>Fc</code>/<code>Ft</code>, lunghezza, coefficiente di sicurezza, materiale (Al 2024, Al 7075, S275), schema di vincolo (β = 1, 0.7, 0.5, 2), sezione ellittica cava o circolare cava. Traccia la curva <code>I_calcolato</code> vs <code>I_richiesto</code> e mostra il log delle iterazioni.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Seguire il dimensionamento dell'asta dalla definizione del carico critico di Eulero alla sezione che soddisfa il requisito di inerzia minima — con animazione della convergenza numerica a velocità selezionabile.</div>
+          </div>
+          <div class="work-topics"><span>Carico critico Eulero</span><span>Instabilità euleriana</span><span>Sezione ellittica</span><span>Metodo iterativo</span><span>β · schema vincoli</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/asta_controventatura.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/asta_controventatura.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.31s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 05</div>
+        <div class="work-title">Sezione ellittica cava — solver iterativo</div>
+        <div class="work-tech">HTML · JS</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Dato <code>I_min</code> richiesto, spessore <code>t</code> e rapporto <code>a/b</code>, risolve numericamente <code>f(b) = R·b⁴ − (b−t)³·(R·b−t) − N = 0</code> e restituisce i semi-assi <code>a</code>, <code>b</code>, l'area <code>A</code> e una vista grafica in scala. Tabella delle iterazioni principali e stampa del report.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Calcolare la geometria della sezione ellittica cava a partire dal momento d'inerzia minimo richiesto — il caso specifico delle dispense di Costruzioni Aeronautiche per le aste di controventatura in Avional.</div>
+          </div>
+          <div class="work-topics"><span>I_min = π·(a·b − c·d)</span><span>Semi-assi a/b</span><span>Solver bisezione</span><span>Vista sezione</span><span>Report di stampa</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/asta_ellittica.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/asta_ellittica.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.37s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 06</div>
+        <div class="work-title">Sezioni aperte — booms + webs</div>
+        <div class="work-tech">HTML · JS · Canvas</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Editor interattivo di sezioni sottili aperte nel modello booms+webs: si trascinano i nodi, doppio clic per aggiungere un nodo. Calcola baricentro, momenti d'inerzia <code>I_z</code>, <code>I_y</code>, <code>I_yz</code> e centro di taglio (<code>y_T</code>, <code>z_T</code>) con il metodo delle aree spazzate <code>Ω = ½·a·r</code>.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Visualizzare come il centro di taglio si sposta al variare della geometria della sezione — fondamentale per il progetto di sezioni di longherone a C, Z o L: se la risultante di taglio non passa per il centro di taglio, nasce una torsione parassita.</div>
+          </div>
+          <div class="work-topics"><span>Booms + webs</span><span>Centro di taglio</span><span>Aree spazzate Ω</span><span>I_z · I_y · I_yz</span><span>Sezione aperta interattiva</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/sezioni_aperte.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/sezioni_aperte.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.43s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 07</div>
+        <div class="work-title">Profili NACA &amp; import .dat — area longherone</div>
+        <div class="work-tech">HTML · JS · Canvas</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Genera il profilo NACA a 4/5 cifre o importa coordinate da file <code>.dat</code> (formato UIUC/Selig). Disegna il profilo in scala reale (corda in mm), calcola l'area tra il bordo d'attacco e il longherone nella posizione prescelta. Modalità presentazione a schermo intero, export PNG a sfondo bianco.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Passare dalla sigla del profilo alla geometria costruttiva — il calcolo dell'area racchiusa è il primo passo per stimare il momento d'inerzia disponibile della sezione a torsione (metodo di Bredt).</div>
+          </div>
+          <div class="work-topics"><span>NACA 4/5 cifre</span><span>.dat UIUC/Selig</span><span>Area LE-longherone</span><span>Corda in mm</span><span>Export PNG</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/progetto_naca.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/progetto_naca.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.49s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 08</div>
+        <div class="work-title">Diagramma V–n — inviluppo di volo</div>
+        <div class="work-tech">HTML · JS · Canvas</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Costruisce il diagramma V–n secondo le categorie <strong>FAR 23</strong> (Normal, Utility, Acrobatic). Input: <code>W</code>, <code>S</code>, <code>CL_max</code>, <code>CL_max,R</code>, corda media, <code>CL_α</code>. Calcola <code>V_A</code>, <code>V_D</code>, <code>n_max</code>, <code>n_min</code> e disegna l'inviluppo completo. Export PNG.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Affrontare i requisiti di resistenza strutturale per la certificazione — dal regolamento FAR 23 alla costruzione dell'inviluppo dal quale si derivano i carichi di progetto per il dimensionamento della struttura.</div>
+          </div>
+          <div class="work-topics"><span>FAR 23</span><span>V_A · V_D · V_C</span><span>n_max · n_min</span><span>Fattore di carico</span><span>Inviluppo di volo</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/diagramma_inviluppo.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/diagramma_inviluppo.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <span class="num">02</span>
+    <h2>Aerodinamica</h2>
+  </div>
+  <p class="section-lead">Simulatori di profili alari, metodo a pannelli, CFD real-time con Lattice-Boltzmann e visualizzazione delle onde d'urto.</p>
+  <div class="works">
+    <article class="work web open fi" style="animation-delay:0.07s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 09</div>
+        <div class="work-title">AeroFoil Sim — simulatore di profili alari</div>
+        <div class="work-tech">HTML · JS · Joukowski</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Simulatore basato sulla trasformazione di Joukowski. Regolabili: tipo di corpo (airfoil, ellisse, lastra piana, cilindro), incidenza <code>α</code>, frecciatura, spessore, quota ISA e geometria alare. Restituisce linee di flusso, vettori <code>C_p</code>, portanza <code>L</code>, resistenza <code>D</code>, <code>C_L</code>, <code>C_D</code> con stima della correzione viscosa all'estradosso.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Visualizzare l'effetto di incidenza, spessore e frecciatura sul campo di flusso. Il confronto inviscido/viscoso mostra l'attenuazione del picco di suzione; il cilindro rotante illustra l'effetto Magnus.</div>
+          </div>
+          <div class="work-topics"><span>Trasformazione Joukowski</span><span>Linee di flusso</span><span>C_L · C_D</span><span>Effetto Magnus</span><span>Correzione viscosa</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/aerofoil_sim.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/aerofoil_sim.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.13s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 10</div>
+        <div class="work-title">NACA Analyzer — metodo a pannelli</div>
+        <div class="work-tech">HTML · JS · Metodo pannelli</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Analisi aerodinamica di un profilo NACA a 4 cifre con <strong>metodo a pannelli</strong> (flusso potenziale). Calcola la distribuzione di <code>−C_p</code>, <code>C_L</code> e <code>C_M</code> al bordo d'attacco. Visualizza suzione (verde) e sovrapressione (rosso) come segmenti proporzionali a <code>|C_p|</code> lungo la normale.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Introdurre il metodo dei pannelli come ponte tra l'aerodinamica analitica e quella numerica. Mostra perché la portanza è generata prevalentemente dall'extradosso.</div>
+          </div>
+          <div class="work-topics"><span>Metodo a pannelli</span><span>Flusso potenziale</span><span>-Cp distribuzione</span><span>C_L · C_M</span><span>Suzione vs sovrapressione</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/potential_flow.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/potential_flow.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.19s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 11</div>
+        <div class="work-title">CFD real-time — LBM Channel Flow (LES)</div>
+        <div class="work-tech">HTML · JS · Lattice-Boltzmann</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Simulazione fluidodinamica in tempo reale con metodo <strong>Lattice-Boltzmann</strong> (LBM) e viscosità sub-griglia (LES). Regolabili: velocità (numero di Mach), viscosità, angolo d'attacco, spessore e frecciatura. Aggiorna continuamente <code>C_L</code> e <code>C_D</code> medi.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Vedere come campo di velocità, vortici di Kármán e coefficienti aerodinamici evolvono al variare dell'incidenza — rende visibile lo stallo e il distacco dello strato limite senza pre-calcolo.</div>
+          </div>
+          <div class="work-topics"><span>Lattice-Boltzmann (LBM)</span><span>LES sub-grid</span><span>Vortici di Kármán</span><span>C_L · C_D real-time</span><span>Stallo visibile</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/cfd.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/cfd.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.25s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 12</div>
+        <div class="work-title">Cono di Mach — onde d'urto</div>
+        <div class="work-tech">HTML · JS · Canvas</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Animazione interattiva della formazione del cono di Mach al variare del numero <code>M</code>. Calcola e visualizza l'angolo <code>μ = arcsin(1/M)</code> e il regime di volo (subsonico / transonico / supersonico / ipersonico).</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Rendere intuitivo il concetto di fronte d'onda di Mach e transizione di regime. Spiega visivamente perché un aereo supersonico non sente il rumore davanti a sé e come nasce il bang sonico.</div>
+          </div>
+          <div class="work-topics"><span>Angolo di Mach μ</span><span>arcsin(1/M)</span><span>Fronte d'onda</span><span>Regime supersonico</span><span>Bang sonico</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/MACH.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/MACH.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.31s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 13</div>
+        <div class="work-title">Odografa — volo librato</div>
+        <div class="work-tech">HTML · JS · Canvas</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Traccia la polare aerodinamica <code>C_D–C_L</code> e la polare delle velocità (odografa) del volo librato usando la polare di Prandtl <code>C_D = C_D0 + k·C_L²</code>. Selezione diretta di <code>γ</code> o <code>C_L</code>; evidenzia i punti caratteristici. Export PNG.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Trovare graficamente <code>(L/D)_max</code>, la velocità di planata ottimale e la velocità di minima perdita di quota. Mostra perché l'aliante vola al minimo <code>C_D/C_L</code> per percorrere la distanza massima.</div>
+          </div>
+          <div class="work-topics"><span>Polare di Prandtl</span><span>Odografa volo librato</span><span>(L/D)_max</span><span>γ · C_L snap</span><span>Vmin affondamento</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/odigrafa_aliante.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/odigrafa_aliante.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <span class="num">03</span>
+    <h2>Propulsione &amp; meccanica del volo</h2>
+  </div>
+  <p class="section-lead">Simulazioni di motori a getto, elica e prestazioni dell'aeromobile: dalla composizione vettoriale della pala al calcolo di V<sub>min</sub>/V<sub>max</sub> del motoelica.</p>
+  <div class="works">
+    <article class="work web open fi" style="animation-delay:0.07s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 14</div>
+        <div class="work-title">Turbojet Simulation — streamlines &amp; diagramma assiale</div>
+        <div class="work-tech">HTML · JS · Canvas</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Simulazione visiva di un motore a getto con animazione delle streamlines e diagramma assiale. Mostra in tempo reale <code>N1</code> (spool LP), <code>N2</code> (spool HP), temperatura <code>EGT</code> e portata di carburante <code>FF</code>.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Visualizzare il funzionamento di un turbojet — flusso d'aria, stadi di compressione, camera di combustione, turbina ed ugello — come strumento introduttivo alla propulsione a reazione.</div>
+          </div>
+          <div class="work-topics"><span>Turbojet</span><span>N1 · N2 · EGT</span><span>Streamlines</span><span>Diagramma assiale</span><span>Propulsione a reazione</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/motore_jet.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/motore_jet.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.13s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 15</div>
+        <div class="work-title">Turbojet Hand Control — controllo gestuale</div>
+        <div class="work-tech">HTML · JS · MediaPipe · Webcam</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">La stessa simulazione del turbojet con controllo della manetta tramite <strong>riconoscimento gestuale via webcam</strong> (MediaPipe). Il gesto della mano aperta/chiusa regola in tempo reale <code>N1</code>, <code>N2</code>, <code>EGT</code>, <code>FF</code>.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Demo interattiva per l'aula: il motore si controlla con la mano davanti alla webcam. Integra computer vision e propulsione in un'unica esperienza.</div>
+          </div>
+          <div class="work-topics"><span>Controllo gestuale</span><span>MediaPipe</span><span>Computer vision</span><span>Webcam</span><span>Turbojet interattivo</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/motore_mano_Majorana.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/motore_mano_Majorana.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.19s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 16</div>
+        <div class="work-title">PropellerLab — spaccato laterale di pala</div>
+        <div class="work-tech">HTML · JS · Canvas</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Visualizzazione vettoriale interattiva dello spaccato di pala: composizione di <code>V</code> (avanzamento) e <code>Ωr</code> (velocità periferica) in <code>V_eff</code>; scomposizione di <code>dL</code> e <code>dD</code> in spinta <code>dT</code> e coppia <code>dQ/r</code>. Regolabili: <code>V</code>, <code>n</code>, <code>D</code>, <code>r/R</code>, calettamento <code>β</code>.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Comprendere la nascita di spinta e coppia dalla geometria del triangolo delle velocità — il punto di partenza della teoria dell'elemento di pala. Mostra perché il calettamento ottimale varia lungo il raggio.</div>
+          </div>
+          <div class="work-topics"><span>V + Ωr → Veff</span><span>dT · dQ/r</span><span>Triangolo velocità</span><span>β · φ · α</span><span>Teoria elemento di pala</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/elica.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/elica.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.25s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 17</div>
+        <div class="work-title">Motoelica — calcolo V<sub>min</sub> e V<sub>max</sub></div>
+        <div class="work-tech">HTML · JS</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Calcola <code>V_min</code> e <code>V_max</code> coerenti usando la polare parabolica <code>C_D = C_D0 + C_L²/(π·AR·e)</code>. Solutore iterativo con smorzamento regolabile. Coefficienti <code>A</code> e <code>B</code> derivati direttamente da <code>C_D0</code>, <code>AR</code>, <code>e</code>.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Applicare la teoria delle prestazioni del motoelica — dal grafico P_richiesta/P_disponibile al calcolo dei limiti di velocità in volo orizzontale uniforme.</div>
+          </div>
+          <div class="work-topics"><span>Polare parabolica</span><span>Vmin · Vmax</span><span>Oswald e</span><span>A·V³ + B/V</span><span>Volo orizzontale uniforme</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/motoelica_velocit%C3%A0.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/motoelica_velocit%C3%A0.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.31s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 18</div>
+        <div class="work-title">Flight Dynamics — assi dell'aeromobile</div>
+        <div class="work-tech">HTML · JS · Three.js</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Modello 3D interattivo di un aeromobile con visualizzazione dei tre assi di rotazione: <code>x</code> rollio (alettoni), <code>y</code> beccheggio (equilibratore), <code>z</code> imbardata (timone). Gli slider controllano in tempo reale l'angolo di rotazione attorno a ciascun asse.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Introdurre la meccanica del volo — convenzione degli assi corpo, natura dei tre movimenti e organi di governo. Rende immediata la comprensione di quali superfici mobili controllano quali rotazioni.</div>
+          </div>
+          <div class="work-topics"><span>Assi corpo</span><span>Rollio · beccheggio · imbardata</span><span>Alettoni · EQ · timone</span><span>Three.js 3D</span><span>Meccanica del volo</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/aereo.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/aereo.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <span class="num">04</span>
+    <h2>Fisica &amp; strumenti</h2>
+  </div>
+  <p class="section-lead">Strumenti di calcolo e conversione per la fisica di base: atmosfera ISA, pressioni, manometria e un editor di equazioni LaTeX.</p>
+  <div class="works">
+    <article class="work web open fi" style="animation-delay:0.07s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 19</div>
+        <div class="work-title">Atmosfera Standard ISA — calcolatore web</div>
+        <div class="work-tech">HTML · JS</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Calcola <code>T</code>, <code>p</code>, <code>ρ</code> e velocità del suono in funzione della quota ISA fino a <code>50 000 m</code>. Calcolo inverso: data la pressione statica misurata, ricava la quota ISA. Profili grafici <code>T(z)</code>, <code>p(z)</code>, <code>ρ(z)</code> con punto mobile.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Versione leggera dell'ISA Calculator accessibile dal browser senza installare nulla. Il calcolo inverso p → quota simula il principio dell'altimetro barometrico.</div>
+          </div>
+          <div class="work-topics"><span>ISA · ISO 2533</span><span>T · p · ρ · a</span><span>Calcolo inverso p → quota</span><span>0 – 50 000 m</span><span>Altimetro barometrico</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/atmo.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/atmo.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.13s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 20</div>
+        <div class="work-title">FormulaDeck — editor di equazioni LaTeX</div>
+        <div class="work-tech">HTML · JS · MathLive · MathJax</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Editor WYSIWYG basato su MathLive: si compone la formula visivamente e si ottiene in tempo reale il sorgente LaTeX, con anteprima renderizzata via MathJax. Costruttore di matrici e sistemi (<code>pmatrix</code>, <code>bmatrix</code>, <code>vmatrix</code>, <code>cases</code>…) e copia negli appunti.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Produrre rapidamente il LaTeX di formule complesse senza ricordarne la sintassi — utile per dispense e prove d'esame. Abbassa la barriera d'ingresso al LaTeX per gli studenti.</div>
+          </div>
+          <div class="work-topics"><span>Editor WYSIWYG</span><span>LaTeX live</span><span>Matrici &amp; sistemi</span><span>MathLive</span><span>MathJax</span></div>
+          <a class="work-cta" href="https://braucci.github.io/FormulaDeck/" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">braucci.github.io/FormulaDeck/</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.19s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 21</div>
+        <div class="work-title">Convertitore di pressione</div>
+        <div class="work-tech">HTML · JS</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Convertitore web tra unità di pressione tecniche e SI: Pa, kPa, MPa, bar, atm, torr, psi, inHg, mmHg, kgf/cm². Funzione di inversione diretta con un clic.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Strumento di lavoro rapido per le conversioni tra sistema anglosassone (psi, inHg) e SI — indispensabile con dati di pneumatici, altimetri, manometri e sistemi idraulici in unità miste.</div>
+          </div>
+          <div class="work-topics"><span>Pa · kPa · bar</span><span>atm · torr · psi</span><span>inHg · mmHg</span><span>kgf/cm²</span><span>Conversione rapida</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/pressione.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/pressione.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.25s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 22</div>
+        <div class="work-title">Calcolatore manometro — legge di Stevino</div>
+        <div class="work-tech">HTML · JS · SVG</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Calcola il dislivello <code>Δh</code> in un manometro a U dalla differenza di pressione: <code>Δp = ρ·g·Δh</code>. Scelta del fluido manometrico (Hg, H₂O, Jet-A, olio idraulico MIL-H-5606, personalizzato). Schema grafico del manometro aggiornato in tempo reale.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Supporto visivo per le esercitazioni sulla statica dei fluidi — il manometro a U come applicazione diretta di Stevino e come strumento di misura di pressioni in campo aeronautico (Pitot, altimetro barometrico).</div>
+          </div>
+          <div class="work-topics"><span>Δp = ρ·g·Δh</span><span>Manometro a U</span><span>Hg · H₂O · Jet-A</span><span>Statica dei fluidi</span><span>Pitot · altimetro</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/stevino.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/stevino.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <span class="num">05</span>
+    <h2>Applicazioni desktop native</h2>
+  </div>
+  <p class="section-lead">Applicazioni autonome scritte in Python, distribuite come repository GitHub: si scaricano, si eseguono dai sorgenti o si costruisce il pacchetto installabile.</p>
+  <div class="works">
+    <article class="work app open fi" style="animation-delay:0.07s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">APP · 01</div>
+        <div class="work-title">ISA Calculator — versione macOS</div>
+        <div class="work-tech">Python · PySide6 (Qt 6)</div>
+        <div class="work-status app">▲ repository</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Bundle <code>.app</code> nativo macOS (doppio clic, senza installare Python). Data <code>h ∈ [0, 20 000] m</code> calcola <code>T</code>, <code>p</code>, <code>δ</code>, <code>ρ</code>, <code>σ</code>, <code>a = √(γRT)</code> e <code>μ</code> (Sutherland) secondo <strong>ISO 2533</strong>. Profili <code>T(h)</code>, <code>p(h)</code>, <code>ρ(h)</code> con marker mobile.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Analisi prestazionale alla quota di crociera, calcolo di Mach e Reynolds in quota. Il motore fisico <code>atmosphere.py</code> è identico alla versione Linux: dimostrazione della separazione modello/interfaccia.</div>
+          </div>
+          <div class="work-topics"><span>ISA · ISO 2533</span><span>Legge di Sutherland</span><span>Qt 6 · PySide6</span><span>macOS .app bundle</span><span>T · p · ρ · a · μ</span></div>
+          <a class="work-cta" href="https://github.com/braucci/isa-calculator-macos" target="_blank" rel="noopener">
+            <div class="ci">⤓</div>
+            <div class="ct">
+              <div class="cl">Vai al repository</div>
+              <div class="cu">github.com/braucci/isa-calculator-macos</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work app fi" style="animation-delay:0.13s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">APP · 02</div>
+        <div class="work-title">ISA Calculator — versione Linux (GTK4)</div>
+        <div class="work-tech">Python · GTK4 · libadwaita</div>
+        <div class="work-status app">▲ repository</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Stessa applicazione ISA con interfaccia <strong>GNOME nativa</strong> per Arch Linux. Installazione via <code>makepkg</code> o esecuzione diretta dai sorgenti.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Dimostrazione del principio di <strong>separazione modello/interfaccia</strong>: <code>atmosphere.py</code> è identico byte per byte alla versione macOS — cambia il toolkit, la fisica non cambia.</div>
+          </div>
+          <div class="work-topics"><span>ISA · ISO 2533</span><span>GTK4 · libadwaita</span><span>Arch Linux · makepkg</span><span>Motore riusabile</span><span>Separazione M/V</span></div>
+          <a class="work-cta" href="https://github.com/braucci/isa-calculator" target="_blank" rel="noopener">
+            <div class="ci">⤓</div>
+            <div class="ct">
+              <div class="cl">Vai al repository</div>
+              <div class="cu">github.com/braucci/isa-calculator</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work app fi" style="animation-delay:0.19s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">APP · 03</div>
+        <div class="work-title">Convertitore SI — SIConverter</div>
+        <div class="work-tech">Python · PyObjC (Cocoa)</div>
+        <div class="work-status app">▲ repository</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">App nativa macOS per la conversione delle grandezze SI con multipli e sottomultipli (prefissi da quetta a quecto) e unità tecniche non-SI: nodo, piede, slug, psi, inHg, CV, Mach. <code>x_t = x_s·(k_s/k_t)</code>; temperatura tramite trasformazione affine.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Strumento quotidiano per unità miste anglosassoni e SI. Ribadisce il principio dell'<em>adimensionalizzazione</em> — lo stesso alla base di Reynolds e Mach.</div>
+          </div>
+          <div class="work-topics"><span>Conversioni SI</span><span>Unità aeronautiche</span><span>Trasformazioni affini</span><span>PyObjC · Cocoa</span><span>macOS nativa</span></div>
+          <a class="work-cta" href="https://github.com/braucci/SIConverter" target="_blank" rel="noopener">
+            <div class="ci">⤓</div>
+            <div class="ct">
+              <div class="cl">Vai al repository</div>
+              <div class="cu">github.com/braucci/SIConverter</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work app fi" style="animation-delay:0.25s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">APP · 04</div>
+        <div class="work-title">Lettera 25 — generatore tipografico</div>
+        <div class="work-tech">Python · GTK4 · Pillow</div>
+        <div class="work-status app">▲ repository</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">App Linux che trasforma testo in PNG simulando la battitura di un'<strong>Olivetti Lettera 25</strong> modellando sette fenomeni fisici: gioco del carrello (gaussiana 2D), usura del perno (rotazione casuale), disomogeneità del nastro (value-noise), diffusione capillare, doppio impatto da rimbalzo elastico. Tre profili estetici e seed riproducibile.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Citazioni e materiale didattico con estetica da dattiloscritto. Caso di studio su come tradurre fenomeni fisici in modelli matematici applicati all'image processing.</div>
+          </div>
+          <div class="work-topics"><span>Tipografia generativa</span><span>7 modelli fisici</span><span>Pillow · GTK4</span><span>Arch Linux</span><span>Seed riproducibile</span></div>
+          <a class="work-cta" href="https://github.com/braucci/lettera25" target="_blank" rel="noopener">
+            <div class="ci">⤓</div>
+            <div class="ct">
+              <div class="cl">Vai al repository</div>
+              <div class="cu">github.com/braucci/lettera25</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <span class="num">06</span>
+    <h2>Strumenti vari &amp; visualizzazioni</h2>
+  </div>
+  <p class="section-lead">Applicazioni che non hanno nulla a che fare con l'aerodinamica: utilità personali e professionali, simulazioni fisiche, visualizzazioni matematiche.</p>
+  <div class="works">
+    <article class="work web open fi" style="animation-delay:0.07s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 23</div>
+        <div class="work-title">Anno di prova — calcolatore giorni DM 226/2022</div>
+        <div class="work-tech">HTML · JS</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Calcola i giorni di servizio e di attività didattica per il riconoscimento dell'anno di prova docenti secondo il <strong>DM 226/2022</strong>. Input: date di inizio/fine servizio, giorni da detrarre per categoria (ferie, malattia, permessi, aspettativa, vacanze estive), giorni effettivi di attività didattica, regime orario. Verifica i due target: <code>180 giorni</code> di servizio e <code>120 giorni</code> di attività didattica.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Strumento pratico per i docenti in anno di prova — il calcolo manuale con le detrazioni previste dall'art. 3 del DM 226/2022 è tedioso e soggetto a errori. Scritta per uso diretto durante il proprio anno di prova.</div>
+          </div>
+          <div class="work-topics"><span>DM 226/2022</span><span>180 gg servizio</span><span>120 gg didattica</span><span>Detrazioni art. 3</span><span>Anno di prova docenti</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/anno-di-prova.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/anno-di-prova.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.13s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 24</div>
+        <div class="work-title">Year Progress Tracker</div>
+        <div class="work-tech">HTML · JS</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Traccia l'avanzamento dell'anno corrente con barra di progressione, contatore dei giorni trascorsi/mancanti e percentuale completata in tempo reale. Genera un testo preformattato pronto da copiare sui social.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Piccolo indicatore di contesto temporale. Utile anche come esempio di come calcolare frazioni di tempo e percentuali in JavaScript con l'oggetto <code>Date()</code>.</div>
+          </div>
+          <div class="work-topics"><span>Anno in corso</span><span>Giorni mancanti</span><span>% completata</span><span>Copia per social</span><span>Date() JS</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/year_progress.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/year_progress.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.19s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 25</div>
+        <div class="work-title">Calendario lunare</div>
+        <div class="work-tech">HTML · JS</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Calendario mensile che mostra la <strong>fase lunare</strong> per ogni giorno, calcolata tramite algoritmo astronomico (ciclo di Metone). Dettaglio del giorno selezionato: percentuale di illuminazione, nome della fase, parametri stimati. Navigazione tra i mesi, supporto timezone Europe/Rome e UTC.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Utilità quotidiana. Mostra anche come implementare un algoritmo astronomico reale in JavaScript senza chiamate API esterne — il calcolo della fase lunare come funzione della data.</div>
+          </div>
+          <div class="work-topics"><span>Fase lunare</span><span>Ciclo di Metone</span><span>Illuminazione %</span><span>Timezone Rome/UTC</span><span>Algoritmo astronomico</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/calendario_lunare.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/calendario_lunare.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.25s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 26</div>
+        <div class="work-title">Visualizzatore funzione 3D</div>
+        <div class="work-tech">HTML · JS · WebGL</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Visualizzatore interattivo di una superficie <code>z = f(x, y)</code> esponenziale renderizzata in 3D nel browser via WebGL. Rotazione con drag, zoom con rotellina.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Visualizzare superfici di funzioni a due variabili — primo approccio al calcolo a più variabili. Utile per rappresentare graficamente campi scalari come la pressione in un dominio 2D o la distribuzione di temperatura.</div>
+          </div>
+          <div class="work-topics"><span>z = f(x,y)</span><span>Superficie 3D</span><span>WebGL</span><span>Campi scalari</span><span>Calcolo a più variabili</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/3dfunction.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/3dfunction.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.31s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 27</div>
+        <div class="work-title">Mandelbulb 3D — frattale tridimensionale</div>
+        <div class="work-tech">HTML · JS · Ray-marching · WebGL</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Rendering real-time del frattale <strong>Mandelbulb</strong> in 3D tramite ray-marching nel browser. Parametri: potenza (default 8), livello di dettaglio, colorazione (spectrum), effetto bloom. Drag per ruotare, scroll per zoom, tasto destro per pan.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Visualizzare un frattale tridimensionale — l'estensione di Mandelbrot in ℝ³ tramite iterazione di una mappa in coordinate sferiche: <code>z → z^n + c</code>. Esempio di geometria frattale e rendering procedurale.</div>
+          </div>
+          <div class="work-topics"><span>Mandelbulb</span><span>Ray-marching</span><span>z^n + c in ℝ³</span><span>Geometria frattale</span><span>WebGL real-time</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/Mandelbulb_3D.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/Mandelbulb_3D.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.37s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 28</div>
+        <div class="work-title">Simulazione tessuto lacerabile</div>
+        <div class="work-tech">HTML · JS · Canvas · Verlet</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Simulazione real-time di un tessuto deformabile (cloth simulation) basata sull'<strong>integrazione di Verlet</strong> con vincoli di distanza. Tasto sinistro per trascinare; tasto destro o Shift+drag per tagliare i vincoli tra nodi adiacenti, lacerando il tessuto. Mostra contatore vincoli attivi e FPS.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Esempio accessibile di simulazione fisica numerica: il metodo di Verlet è lo stesso usato in dinamica molecolare e nei motori fisici di gioco. Mostra come vincoli semplici di distanza producano un comportamento macroscopico realistico.</div>
+          </div>
+          <div class="work-topics"><span>Cloth simulation</span><span>Integrazione di Verlet</span><span>Vincoli di distanza</span><span>Taglio dei vincoli</span><span>Fisica numerica</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/tovaglia.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/tovaglia.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.43s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 29</div>
+        <div class="work-title">Viewer 360° — immagini equirettangolari</div>
+        <div class="work-tech">HTML · JS · WebGL · Three.js</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Visualizza immagini equirettangolari 360° (tipiche delle fotocamere RICOH THETA, formato 2:1) in un proiettore sferico interattivo. <strong>Drag&amp;Drop</strong> di un file JPG/PNG per caricare la propria immagine. Drag per guardarsi intorno, rotellina/pinch per zoom, fullscreen.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Presentare riprese panoramiche 360° in aula — tour virtuali di hangar, cockpit, laboratori — senza installare software. Funziona direttamente dal browser su PC e mobile.</div>
+          </div>
+          <div class="work-topics"><span>360° equirettangolare</span><span>RICOH THETA</span><span>Proiezione sferica</span><span>Drag &amp; Drop</span><span>Fullscreen</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/viewer_theta_360.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/viewer_theta_360.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.49s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 30</div>
+        <div class="work-title">Memento Mori — griglia degli anni</div>
+        <div class="work-tech">HTML · JS</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Visualizza la vita come una <strong>griglia di puntini</strong>, uno per anno. I puntini già trascorsi dalla data di nascita impostata sono evidenziati rispetto a quelli ancora da vivere. Un promemoria visivo del tempo che scorre.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Riflessione stoica sul tempo — nel solco della filosofia del <em>memento mori</em>. Spunto per discutere di come rappresentare dati discreti con visualizzazioni semplici ed efficaci.</div>
+          </div>
+          <div class="work-topics"><span>Memento mori</span><span>Visualizzazione discreta</span><span>Griglia anni</span><span>Filosofia stoica</span><span>Data di nascita</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/memento_mori.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/memento_mori.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work web fi" style="animation-delay:0.55s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 31</div>
+        <div class="work-title">X Video Extractor</div>
+        <div class="work-tech">HTML · JS · cobalt.tools</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Interfaccia web che tenta di estrarre video da un URL pubblico tramite l'API cobalt.tools. Se l'API richiede autenticazione, genera automaticamente un link diretto a cobalt.tools con l'URL pre-compilato. Per uso personale esclusivo.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Utilità personale per il download di video da piattaforme pubbliche. Il codice mostra come gestire i limiti CORS del browser e come costruire un fallback elegante quando un'API non è interrogabile direttamente dal client.</div>
+          </div>
+          <div class="work-topics"><span>cobalt.tools</span><span>Download video</span><span>CORS fallback</span><span>URL pubblici</span><span>Uso personale</span></div>
+          <a class="work-cta" href="https://www.raucci.net/wp-content/uploads/cfd/x-video-downloader.html" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">www.raucci.net/wp-content/uploads/cfd/x-video-downloader.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<footer>
+  <div><span class="a">//</span> AVIONICA · STRUMENTI &amp; CODICE &nbsp;·&nbsp; Prof. Ing. Biagio Raucci</div>
+  <div>ITIS E. Majorana — Cassino &nbsp;·&nbsp; A.S. <span class="a">2025/26</span></div>
+</footer>
+
+<script>
+function tog(el) { el.classList.toggle('open'); }
+</script>
+</body>
+</html>
