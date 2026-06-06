@@ -163,9 +163,9 @@ footer .a{color:var(--accent)}
     programma, a cosa serve e raggiungere il link diretto.
   </p>
   <div class="hero-meta">
-    <div>Lavori catalogati<strong><span class="a">36</span></strong></div>
+    <div>Lavori catalogati<strong><span class="a">37</span></strong></div>
     <div>Web app online<strong>31</strong></div>
-    <div>App desktop native<strong>05</strong></div>
+    <div>App desktop native<strong>06</strong></div>
     <div>A.S.<strong>2025/26</strong></div>
   </div>
 </section>
@@ -1022,6 +1022,36 @@ footer .a{color:var(--accent)}
             <div class="ct">
               <div class="cl">Vai al repository</div>
               <div class="cu">github.com/braucci/FormulaDeckMac</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work app fi" style="animation-delay:0.37s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">APP · 06</div>
+        <div class="work-title">Lettera72 — compositore testo giustificato</div>
+        <div class="work-tech">Python · PyObjC · Cocoa</div>
+        <div class="work-status app">▲ repository</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">App nativa macOS (bundle <code>.app</code> via py2app). Si incolla un testo nel pannello sinistro; a destra appare <strong>giustificato a colonna fissa</strong> (20–120 colonne, default 72) in carattere monospazio. Si copia e si incolla nell'email: il testo resta perfettamente allineato. Funzioni: larghezza colonna regolabile, modalità citazione <code>&gt;</code> (la giustificazione usa la larghezza ridotta <code>W − len("> ")</code> così la riga totale resta esatta a <code>W</code>), opzione spezza parole lunghe (URL), Apri/Salva file di testo, menu Modifica completo (⌘C/V/X/A/Z). Il solutore <code>giustifica.py</code> è logica pura, senza dipendenze da AppKit: <em>identico alla versione GTK4 per Linux</em>, testabile in isolamento.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Scrivere email in testo semplice tipograficamente pulite — l'opzione che <em>The Bat!</em> aveva e che a Gmail manca. Il README la descrive così: <em>composizione a colonna fissa per chi vuole il controllo tipografico anche nel testo piano</em>. Sul piano architetturale ribadisce il principio di separazione modello/interfaccia: <code>giustifica.py</code> non sa nulla di finestre, esattamente come un solutore CFD è indipendente dal viewer dei risultati.</div>
+          </div>
+          <div class="work-topics"><span>Giustificazione a 72 col</span><span>Modalità citazione &gt;</span><span>PyObjC · py2app</span><span>macOS 11+</span><span>Separazione M/V</span></div>
+          <a class="work-cta" href="https://github.com/braucci/Lettera72-macOS" target="_blank" rel="noopener">
+            <div class="ci">⤓</div>
+            <div class="ct">
+              <div class="cl">Vai al repository</div>
+              <div class="cu">github.com/braucci/Lettera72-macOS</div>
             </div>
             <div class="ca">→</div>
           </a>
