@@ -163,9 +163,9 @@ footer .a{color:var(--accent)}
     programma, a cosa serve e raggiungere il link diretto.
   </p>
   <div class="hero-meta">
-    <div>Lavori catalogati<strong><span class="a">37</span></strong></div>
+    <div>Lavori catalogati<strong><span class="a">38</span></strong></div>
     <div>Web app online<strong>31</strong></div>
-    <div>App desktop native<strong>06</strong></div>
+    <div>App desktop native<strong>07</strong></div>
     <div>A.S.<strong>2025/26</strong></div>
   </div>
 </section>
@@ -1052,6 +1052,36 @@ footer .a{color:var(--accent)}
             <div class="ct">
               <div class="cl">Vai al repository</div>
               <div class="cu">github.com/braucci/Lettera72-macOS</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+    <article class="work app fi" style="animation-delay:0.43s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">APP · 07</div>
+        <div class="work-title">LibroQuote — citazioni con estetica da pagina di libro</div>
+        <div class="work-tech">Python · PyObjC · Pillow · numpy</div>
+        <div class="work-status app">▲ repository</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">App nativa macOS (bundle <code>.app</code> via py2app) che trasforma una citazione testuale in un'immagine dall'aspetto di una <strong>pagina di libro fotografata</strong> — pronta da pubblicare sui social. L'effetto non è un singolo filtro ma la sovrapposizione di fenomeni fisici modellati separatamente: <strong>grana della carta</strong> (rumore multi-ottava, fractal Brownian motion con componente fibrosa direzionale, ponderata verso le alte frequenze come in uno spettro di energia turbolenta), <strong>trasparenza del foglio</strong> (testo del retro che traspare), <strong>vignettatura dell'obiettivo</strong> e micro-imperfezioni di stampa. Parametri: font serif di sistema, corsivo/grassetto, allineamento, formato 1:1 o 4:5 (standard Instagram), colore carta (bianco naturale, avorio, crema, ingiallita, grigio), colore inchiostro (nero stampa, seppia, grigio, blu notte), corpo del carattere, intensità di grana/trasparenza/vignettatura. Anteprima in tempo reale ottimizzata (da ~700 ms a ~60 ms) tramite cache del substrato cartaceo, rendering a risoluzione ridotta durante l'editing e debouncing degli slider a 120 ms. Determinismo garantito: a parità di testo, parametri e seed il render è pixel-identico.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Produrre immagini per citazioni letterarie con qualità tipografica controllata — utile per chi gestisce un blog letterario e vuole materiale visivo per i social. Sul piano formativo è una nuova istanza dello stesso approccio di Lettera 25: <em>scomporre un fenomeno visivo complesso nei suoi contributi elementari</em>, modellarli matematicamente in isolamento e sovrapporli — lo stesso modo in cui un campo aerodinamico si scompone prima del post-processing.</div>
+          </div>
+          <div class="work-topics"><span>fBm · grana carta</span><span>Vignettatura</span><span>Trasparenza foglio</span><span>PyObjC · py2app</span><span>Debouncing 120 ms</span></div>
+          <a class="work-cta" href="https://github.com/braucci/LibroQuote" target="_blank" rel="noopener">
+            <div class="ci">⤓</div>
+            <div class="ct">
+              <div class="cl">Vai al repository</div>
+              <div class="cu">github.com/braucci/LibroQuote</div>
             </div>
             <div class="ca">→</div>
           </a>
