@@ -163,8 +163,8 @@ footer .a{color:var(--accent)}
     programma, a cosa serve e raggiungere il link diretto.
   </p>
   <div class="hero-meta">
-    <div>Lavori catalogati<strong><span class="a">39</span></strong></div>
-    <div>Web app online<strong>32</strong></div>
+    <div>Lavori catalogati<strong><span class="a">40</span></strong></div>
+    <div>Web app online<strong>33</strong></div>
     <div>App desktop native<strong>07</strong></div>
     <div>A.S.<strong>2025/26</strong></div>
   </div>
@@ -574,6 +574,43 @@ footer .a{color:var(--accent)}
               <div class="cu">www.raucci.net/wp-content/uploads/cfd/odigrafa_aliante.html</div>
             </div>
             <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    
+    <article class="work web fi" style="animation-delay:0.43s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB &middot; 14</div>
+        <div class="work-title">Navier&ndash;Stokes 2D &mdash; solver fluido su GPU</div>
+        <div class="work-tech">HTML &middot; GLSL &middot; WebGL 1/2</div>
+        <div class="work-status web">&#9679; online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">&#9658;</span> Cosa fa</div>
+            <div class="bt">Risolve in tempo reale le equazioni di Navier&ndash;Stokes per un fluido <strong>incomprimibile 2D</strong> interamente sulla GPU via WebGL. Il metodo &egrave; <strong>stable fluids</strong> (Jos Stam, 1999): incondizionatamente stabile qualunque sia il passo temporale. La pipeline per frame esegue in sequenza: advezione semi-lagrangiana del campo di velocit&agrave; &rarr; calcolo del <code>curl</code> &rarr; <strong>vorticity confinement</strong> (amplifica i vortici che la discretizzazione tenderebbe a smorzare) &rarr; calcolo della divergenza &rarr; soluzione del campo di pressione con iterazioni di <strong>Jacobi</strong> (<code>PRESSURE_ITERATIONS = 22</code>, condizione di incomprimibilit&agrave; <code>&nabla;&middot;u = 0</code>) &rarr; sottrazione del gradiente di pressione &rarr; advezione del dye &rarr; rendering con shading fittizio (gradiente del dye come normale). Ogni passo &egrave; uno shader GLSL che scrive su un framebuffer oggetto (ping-pong tra due FBO); il campo di velocit&agrave; &egrave; a 128&times;128, il dye a 1024&times;1024. Il cursore (o il tocco) inietta uno <em>splat</em> gaussiano di velocit&agrave; e colore nel campo.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">&#9658;</span> A cosa serve</div>
+            <div class="bt">Rendere visibile il comportamento qualitativo di un fluido viscoso incomprimibile &mdash; vorticit&agrave;, diffusione, advezione &mdash; senza richiedere alcuna installazione: gira nel browser a 60 fps anche su hardware modesto grazie all&rsquo;esecuzione GPU. Per la didattica, mostra in modo immediato il significato fisico dei termini dell&rsquo;equazione: il termine di advezione <code>(u&middot;&nabla;)u</code> trasporta i vortici, il solutore di pressione impone <code>&nabla;&middot;u = 0</code>, il vorticity confinement contrasta la diffusione numerica. Ideale come introduzione visiva alla CFD prima di affrontare i metodi numerici formali.</div>
+          </div>
+          <div class="work-topics">
+            <span>Navier&ndash;Stokes 2D</span>
+            <span>Stable fluids (Stam 1999)</span>
+            <span>Vorticity confinement</span>
+            <span>Jacobi &nabla;&middot;u = 0</span>
+            <span>WebGL 1/2 &middot; GLSL</span>
+            <span>Ping-pong FBO</span>
+          </div>
+          <a class="work-cta" href="https://braucci.github.io/navierstokes/" target="_blank" rel="noopener">
+            <div class="ci">&#128640;</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">braucci.github.io/navierstokes/</div>
+            </div>
+            <div class="ca">&#8594;</div>
           </a>
         </div>
       </div>
