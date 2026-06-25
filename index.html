@@ -163,9 +163,9 @@ footer .a{color:var(--accent)}
     programma, a cosa serve e raggiungere il link diretto.
   </p>
   <div class="hero-meta">
-    <div>Lavori catalogati<strong><span class="a">41</span></strong></div>
+    <div>Lavori catalogati<strong><span class="a">42</span></strong></div>
     <div>Web app online<strong>33</strong></div>
-    <div>App desktop native<strong>08</strong></div>
+    <div>App desktop native<strong>09</strong></div>
     <div>A.S.<strong>2025/26</strong></div>
   </div>
 </section>
@@ -1160,7 +1160,45 @@ footer .a{color:var(--accent)}
           </a>
         </div>
       </div>
+    
+    <article class="work app fi" style="animation-delay:0.63s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">APP · 09</div>
+        <div class="work-title">raucci-appunti — stile LaTeX per dispense tecnico-scientifiche</div>
+        <div class="work-tech">LaTeX · .sty · tcolorbox · siunitx</div>
+        <div class="work-status app">▲ repository</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Pacchetto LaTeX (<code>.sty</code>) per appunti e monografie tecnico-scientifiche — evoluzione generalizzata dello stile sviluppato per le dispense di Costruzioni Aeronautiche. Caratteristiche principali: <strong>tipografia EB Garamond</strong> per testo e matematica, con fallback automatico se il font non è installato (la compilazione non si interrompe mai); <strong>riquadri tematici</strong> colorati via <code>tcolorbox</code> (<code>definizione</code> blu, <code>teorema</code> blu, <code>esempio</code> verde, <code>nota</code> grigio, <code>attenzione</code> rosso, più <code>dimostrazione</code> e <code>osservazione</code> non riquadrati); <strong>figure con segnaposto automatico</strong> — la macro <code>\figura</code> mostra un riquadro tratteggiato con il nome atteso finché il file immagine non è presente, poi lo sostituisce da sola; <code>siunitx</code> preconfigurato (virgola decimale in italiano, punto in inglese) con unità tecniche aggiuntive (<code>\kgf</code>, <code>\hp</code>, <code>\kt</code>, <code>\daN</code>); <strong>copertina a piena pagina</strong> configurabile; intestazioni differenziate pari/dispari; opzione lingua <code>italian</code>/<code>english</code>. Funziona sia in locale (TeX Live, MiKTeX) sia su <strong>Overleaf</strong> senza installazione.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Produrre una serie di dispense tipograficamente coerenti senza ridefinire ogni volta la struttura — si include con <code>\usepackage[italian]{raucci-appunti}</code> e il documento eredita automaticamente tutta la gerarchia visiva. Il segnaposto automatico delle figure è particolarmente utile in fase di stesura: la struttura del documento è già completa e compilabile anche quando le immagini non sono ancora pronte. Le macro matematiche di uso generale (<code>\diff</code>, <code>\dd{x}</code>, <code>\deriv</code>, <code>\derivpar</code>, <code>\vett</code>, <code>\norm</code>, <code>\media</code>) coprono il 90% della notazione ricorrente in un corso di fisica o ingegneria.</div>
+          </div>
+          <div class="work-topics">
+            <span>Pacchetto .sty</span>
+            <span>EB Garamond</span>
+            <span>tcolorbox · riquadri tematici</span>
+            <span>siunitx IT/EN</span>
+            <span>Overleaf compatibile</span>
+            <span>Segnaposto figure</span>
+          </div>
+          <a class="work-cta" href="https://github.com/braucci/raucci-appunti" target="_blank" rel="noopener">
+            <div class="ci">⤓</div>
+            <div class="ct">
+              <div class="cl">Vai al repository</div>
+              <div class="cu">github.com/braucci/raucci-appunti</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
     </article>
+
 
   </div>
 </section>
