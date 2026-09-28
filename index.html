@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AVIONICA // Strumenti &amp; Codice — Prof. Ing. Biagio Raucci</title>
-<meta name="description" content="Portale dei lavori di programmazione del Prof. Ing. Biagio Raucci — applicazioni e web app per la didattica delle Costruzioni Aeronautiche, ITIS E. Majorana, Cassino.">
+<meta name="description" content="Portale dei lavori di programmazione del Prof. Ing. Biagio Raucci — applicazioni e web app per la didattica delle Costruzioni Aeronautiche, ITIS E. Majorana, Somma Vesuviana.">
 <style>
 :root {
   --bg:#0b0f14;--bg-elev:#111824;--bg-card:#0e1622;
@@ -149,7 +149,7 @@ footer .a{color:var(--accent)}
       <span>SYS · ONLINE</span>
       <span>// SUITE STRUMENTI</span>
     </div>
-    <div class="topbar-right">ITIS E. MAJORANA · CASSINO</div>
+    <div class="topbar-right">ITIS E. MAJORANA · SOMMA VESUVIANA</div>
   </div>
 </div>
 
@@ -163,10 +163,10 @@ footer .a{color:var(--accent)}
     programma, a cosa serve e raggiungere il link diretto.
   </p>
   <div class="hero-meta">
-    <div>Lavori catalogati<strong><span class="a">44</span></strong></div>
-    <div>Web app online<strong>35</strong></div>
+    <div>Lavori catalogati<strong><span class="a">45</span></strong></div>
+    <div>Web app online<strong>36</strong></div>
     <div>App desktop native<strong>09</strong></div>
-    <div>A.S.<strong>2025/26</strong></div>
+    <div>A.S.<strong>2026/27</strong></div>
   </div>
 </section>
 
@@ -417,7 +417,8 @@ footer .a{color:var(--accent)}
           </a>
         </div>
       </div>
-    
+    </article>
+
     <article class="work web fi" style="animation-delay:0.57s">
       <header class="work-header" onclick="tog(this.parentElement)">
         <div class="work-code">WEB · 09</div>
@@ -614,7 +615,8 @@ footer .a{color:var(--accent)}
           </a>
         </div>
       </div>
-    
+    </article>
+
     <article class="work web fi" style="animation-delay:0.43s">
       <header class="work-header" onclick="tog(this.parentElement)">
         <div class="work-code">WEB · 15</div>
@@ -660,7 +662,7 @@ footer .a{color:var(--accent)}
     <span class="num">03</span>
     <h2>Propulsione &amp; meccanica del volo</h2>
   </div>
-  <p class="section-lead">Simulazioni di motori a getto, elica e prestazioni dell'aeromobile: dalla composizione vettoriale della pala al calcolo di V<sub>min</sub>/V<sub>max</sub> del motoelica.</p>
+  <p class="section-lead">Simulazioni di motori a getto, elica e prestazioni dell'aeromobile: dalla composizione vettoriale della pala al calcolo di V<sub>min</sub>/V<sub>max</sub> del motoelica, fino al laboratorio completo sul volo librato dell'aliante.</p>
   <div class="works">
     <article class="work web fi" style="animation-delay:0.07s">
       <header class="work-header" onclick="tog(this.parentElement)">
@@ -806,6 +808,54 @@ footer .a{color:var(--accent)}
             <div class="ct">
               <div class="cl">Apri la web app</div>
               <div class="cu">www.raucci.net/wp-content/uploads/cfd/aereo.html</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <article class="work web fi" style="animation-delay:0.37s">
+      <header class="work-header" onclick="tog(this.parentElement)">
+        <div class="work-code">WEB · 36</div>
+        <div class="work-title">Il Volo Librato — laboratorio interattivo sull'aliante</div>
+        <div class="work-tech">HTML · JS · SVG</div>
+        <div class="work-status web">● online</div>
+        <div class="work-toggle">+</div>
+      </header>
+      <div class="work-body">
+        <div class="work-body-inner">
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> Cosa fa</div>
+            <div class="bt">Laboratorio completo sulla meccanica del volo librato, costruito sulla raccolta <em>Il Volo Librato — esercizi svolti</em>. Dati dell'aliante con polare parabolica <code>C_D = C_D0 + C_L²/(π·e·AR)</code> oppure <strong>per punti</strong> (con tratto post-stallo); dodici preset caricano direttamente i dati degli esercizi. Traccia <strong>polare</strong> e <strong>odografa</strong> interattive con i punti caratteristici A (candela), B (<code>E_max</code>), C (<code>w_min</code>), D (stallo) e le costruzioni geometriche che li individuano: tangente dall'origine, tangente orizzontale, ripartizione tra resistenza parassita e indotta. Mostra l'effetto di <strong>quota</strong>, <strong>zavorra</strong> e <strong>diruttori</strong> (omotetia dell'odografa, confronto con l'aliante di riferimento) e del <strong>vento</strong> (origine al suolo <code>O′</code> e assetto <code>B′</code> di massima distanza al suolo). Un diagramma di <strong>corpo libero</strong> disegna l'aliante con l'assetto <code>θ = α − γ</code>, le forze <code>L</code>, <code>D</code>, <code>W</code> e il triangolo delle velocità; una <strong>scena animata</strong> confronta la discesa di due alianti, anche in atmosfera standard con densità variabile lungo la planata. Il risolutore contiene otto schede che svolgono passo per passo tutte le famiglie di esercizi della raccolta.</div>
+          </div>
+          <div class="work-block">
+            <div class="bl"><span class="m">▸</span> A cosa serve</div>
+            <div class="bt">Rendere visibile ciò che sulla carta resta statico: che cosa cambia — e soprattutto che cosa <em>non</em> cambia — quando si modificano peso, quota, vento o configurazione. Lo studente verifica i propri svolgimenti con le stesse formule e gli stessi simboli degli appunti (i risultati coincidono con quelli della raccolta), mentre il docente dispone di uno strumento da lavagna per mostrare perché la zavorra non accorcia la planata, perché controvento si vola più veloci di <code>B</code> e perché l'aliante scende con il muso sopra l'orizzonte. Il <strong>manuale operativo</strong> (PDF) guida l'uso dell'app esercizio per esercizio, con le letture da fare sui grafici, i confronti numerici e proposte di attività in classe. Estende la web app <em>Odografa — volo librato</em> (WEB · 14).</div>
+          </div>
+          <div class="work-topics">
+            <span>Polare · odografa</span>
+            <span>Punti A · B · C · D</span>
+            <span>Vento · tangente da O′</span>
+            <span>Zavorra · quota · omotetia</span>
+            <span>Diruttori C′_D0</span>
+            <span>Corpo libero θ = α − γ</span>
+            <span>Atmosfera standard</span>
+            <span>Risolutore 26 esercizi</span>
+          </div>
+          <a class="work-cta" href="https://braucci.github.io/VoloLibrato/" target="_blank" rel="noopener">
+            <div class="ci">🚀</div>
+            <div class="ct">
+              <div class="cl">Apri la web app</div>
+              <div class="cu">braucci.github.io/VoloLibrato/</div>
+            </div>
+            <div class="ca">→</div>
+          </a>
+          <a class="work-cta" href="https://braucci.github.io/VoloLibrato/manuale_volo_librato.pdf" target="_blank" rel="noopener" style="margin-top:10px">
+            <div class="ci">📘</div>
+            <div class="ct">
+              <div class="cl">Leggi il manuale operativo (PDF)</div>
+              <div class="cu">braucci.github.io/VoloLibrato/manuale_volo_librato.pdf</div>
             </div>
             <div class="ca">→</div>
           </a>
@@ -1161,7 +1211,8 @@ footer .a{color:var(--accent)}
           </a>
         </div>
       </div>
-    
+    </article>
+
     <article class="work app fi" style="animation-delay:0.56s">
       <header class="work-header" onclick="tog(this.parentElement)">
         <div class="work-code">APP · 08</div>
@@ -1197,7 +1248,8 @@ footer .a{color:var(--accent)}
           </a>
         </div>
       </div>
-    
+    </article>
+
     <article class="work app fi" style="animation-delay:0.63s">
       <header class="work-header" onclick="tog(this.parentElement)">
         <div class="work-code">APP · 09</div>
@@ -1590,7 +1642,7 @@ footer .a{color:var(--accent)}
 
 <footer>
   <div><span class="a">//</span> AVIONICA · STRUMENTI &amp; CODICE &nbsp;·&nbsp; Prof. Ing. Biagio Raucci</div>
-  <div>ITIS E. Majorana — Cassino &nbsp;·&nbsp; A.S. <span class="a">2025/26</span></div>
+  <div>ITIS E. Majorana — Somma Vesuviana &nbsp;·&nbsp; A.S. <span class="a">2026/27</span></div>
 </footer>
 
 <script>
