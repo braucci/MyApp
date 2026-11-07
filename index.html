@@ -11,7 +11,7 @@
 .monograph-mark{position:absolute;right:6%;top:30px;width:350px;margin:0;padding:12px;background:#fffef9;border-radius:14px;box-shadow:0 18px 35px #384c2520;transform:rotate(2deg)}
 .monograph-mark img{display:block;width:100%;height:auto;border-radius:5px}
 .hero h1{margin-top:170px}
-.works{display:flex;gap:16px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#a5af8f transparent;padding:8px 3px 20px;align-items:flex-start;scroll-padding-inline:3px}
+.works{display:flex;gap:16px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:none;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#a5af8f transparent;padding:8px 3px 20px;align-items:flex-start;scroll-padding-inline:3px}
 .works::-webkit-scrollbar{height:6px}.works::-webkit-scrollbar-thumb{background:#a5af8f;border-radius:10px}
 .works .work{flex:0 0 285px;scroll-snap-align:start;position:relative;border-radius:4px 18px 4px 4px;background:linear-gradient(135deg,#fffef9 85%,#eeeedf);box-shadow:0 5px 0 -2px #e5e6d8,0 8px 0 -3px #d9ddca;margin-bottom:8px}
 .works .work:before{content:'';position:absolute;top:0;right:0;width:22px;height:22px;background:linear-gradient(225deg,var(--paper) 49%,#dce1cf 50%,#ecefe3 100%);pointer-events:none}
@@ -33,6 +33,17 @@
 @media(max-width:600px){.topbar nav>a:first-child{display:block}.topbar nav{gap:13px}.topbar{flex-wrap:wrap}.monograph-mark{position:relative;right:auto;top:auto;width:min(300px,90%);margin:30px auto 32px;padding:8px}.hero h1{margin-top:25px}.works{gap:14px;padding-right:12px}.works .work{flex-basis:85%;min-width:0}.works .work-header{min-height:205px;padding:21px 19px}.works .work-title{font-size:23px}.shelf-hint{max-width:155px;font-size:10px}.shelf-position{min-width:44px}.shelf-controls{gap:5px}.sheet-dialog{width:calc(100% - 16px);max-width:none;max-height:calc(100dvh - 20px);border-radius:12px;margin:auto}.sheet-top{padding:8px 18px}.sheet-dialog h2{font-size:28px;margin:22px 20px 12px}.sheet-meta{margin:0 20px 20px}.sheet-dialog .work-block{grid-template-columns:1fr;gap:8px}.sheet-dialog .bt{font-size:13px}.sheet-dialog .work-body-inner{padding:0 20px 24px}.sheet-dialog .work-topics span{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.sheet-dialog[open]{animation:none}}
 @media print{.works{display:block;overflow:visible}.works .work{box-shadow:none}.shelf-toolbar{display:none}.monograph-mark{position:static;width:180px}.hero h1{margin-top:20px}}
+
+/* Direct manipulation: the sheets follow the pointer and coast on release. */
+.works{cursor:grab;user-select:none;-webkit-user-select:none}
+.works .work-header{cursor:grab}
+.works .work{transform-origin:50% 85%;transition:transform .22s ease-out,box-shadow .22s ease-out,border-color .2s}
+.works.is-dragging,.works.is-dragging .work-header{cursor:grabbing}
+.works.is-dragging .work,.works.is-gliding .work{transform:translateY(-2px) rotate(var(--sheet-tilt,0deg));box-shadow:0 8px 0 -4px #dce1d0,0 12px 18px -10px #34432338}
+.works.is-dragging .work{transition:transform 70ms linear,box-shadow .15s}
+@media(prefers-reduced-motion:reduce){.works.is-dragging .work,.works.is-gliding .work{transform:none}}
+
+.works.fluid-scroll{touch-action:pan-y pinch-zoom}
 
 </style>
 </head>
@@ -1799,6 +1810,110 @@
     });
   });
 
+  function enableFluidScroll(track) {
+    track.classList.add('fluid-scroll');
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let gesture = null;
+    let frame = 0;
+    let suppressClick = false;
+
+    function stop() {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      track.classList.remove('is-dragging', 'is-gliding');
+      track.style.removeProperty('--sheet-tilt');
+      if (gesture && track.hasPointerCapture(gesture.id)) track.releasePointerCapture(gesture.id);
+      gesture = null;
+    }
+
+    function settle() {
+      const left = track.getBoundingClientRect().left + 3;
+      const offsets = [...track.querySelectorAll('.work:not([hidden])')]
+        .map(card => card.getBoundingClientRect().left - left);
+      const nearest = offsets.reduce((best, offset) => Math.abs(offset) < Math.abs(best) ? offset : best, Infinity);
+      // Only a light magnetic finish near an edge, never a forced page jump.
+      if (Math.abs(nearest) < 48) {
+        track.scrollBy({left:nearest, behavior:reducedMotion.matches ? 'instant' : 'smooth'});
+      }
+    }
+
+    function coast(velocity) {
+      let previousTime = performance.now();
+      track.classList.add('is-gliding');
+      function tick(time) {
+        const elapsed = Math.min(time - previousTime, 40);
+        previousTime = time;
+        const decay = Math.exp(-elapsed / 270);
+        const before = track.scrollLeft;
+        track.scrollLeft += velocity * 270 * (1 - decay);
+        velocity *= decay;
+        track.style.setProperty('--sheet-tilt', `${Math.max(-1.2, Math.min(1.2, -velocity * .6))}deg`);
+        if (Math.abs(velocity) < .025 || Math.abs(track.scrollLeft - before) < .1) {
+          stop();
+          settle();
+          return;
+        }
+        frame = requestAnimationFrame(tick);
+      }
+      frame = requestAnimationFrame(tick);
+    }
+
+    track.addEventListener('pointerdown', event => {
+      if (!event.isPrimary || event.button !== 0) return;
+      stop();
+      // Interrupt a previous button animation at its current position.
+      track.scrollTo({left:track.scrollLeft, behavior:'instant'});
+      suppressClick = false;
+      gesture = {id:event.pointerId, x:event.clientX, y:event.clientY,
+        startScroll:track.scrollLeft, lastX:event.clientX, time:event.timeStamp,
+        velocity:0, dragging:false};
+    });
+    track.addEventListener('pointermove', event => {
+      if (!gesture || gesture.id !== event.pointerId) return;
+      const dx = event.clientX - gesture.x;
+      const dy = event.clientY - gesture.y;
+      if (!gesture.dragging) {
+        if (Math.max(Math.abs(dx), Math.abs(dy)) < 7) return;
+        if (Math.abs(dy) > Math.abs(dx)) { stop(); return; }
+        gesture.dragging = true;
+        suppressClick = true;
+        track.setPointerCapture(event.pointerId);
+        track.classList.add('is-dragging');
+      }
+      event.preventDefault();
+      const elapsed = Math.max(1, event.timeStamp - gesture.time);
+      const velocity = (gesture.lastX - event.clientX) / elapsed;
+      gesture.velocity = .65 * velocity + .35 * gesture.velocity;
+      gesture.lastX = event.clientX;
+      gesture.time = event.timeStamp;
+      track.scrollLeft = gesture.startScroll - dx;
+      if (!reducedMotion.matches) {
+        track.style.setProperty('--sheet-tilt', `${Math.max(-1.2, Math.min(1.2, -gesture.velocity * .6))}deg`);
+      }
+    }, {passive:false});
+    track.addEventListener('pointerup', event => {
+      if (!gesture || gesture.id !== event.pointerId) return;
+      const dragging = gesture.dragging;
+      const velocity = event.timeStamp - gesture.time > 100 ? 0 : Math.max(-3, Math.min(3, gesture.velocity));
+      stop();
+      if (!dragging) return;
+      if (!reducedMotion.matches && Math.abs(velocity) > .08) coast(velocity);
+      else settle();
+    });
+    track.addEventListener('pointercancel', stop);
+    track.addEventListener('lostpointercapture', () => { if (gesture) stop(); });
+    track.addEventListener('wheel', stop, {passive:true});
+    track.addEventListener('dragstart', event => event.preventDefault());
+    track.addEventListener('click', event => {
+      if (suppressClick && event.detail !== 0) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    }, true);
+    reducedMotion.addEventListener('change', stop);
+    return stop;
+  }
+
   sections.forEach(section => {
     const track = section.querySelector('.works');
     track.id = section.id + '-sheets';
@@ -1826,7 +1941,9 @@
       prev.disabled = track.scrollLeft <= 2;
       next.disabled = track.scrollWidth - track.clientWidth - track.scrollLeft <= 2;
     }
+    const stopMotion = enableFluidScroll(track);
     function scrollToCard(card) {
+      stopMotion();
       const left = card.getBoundingClientRect().left - track.getBoundingClientRect().left + track.scrollLeft - 3;
       track.scrollTo({left, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
     }
@@ -1849,8 +1966,8 @@
       const target = visible[index + (event.key === 'ArrowRight' ? 1 : -1)];
       if (target) { target.querySelector('summary').focus({preventScroll:true}); scrollToCard(target); }
     });
-    new ResizeObserver(update).observe(track);
-    shelves.push({track, update});
+    new ResizeObserver(() => { stopMotion(); update(); }).observe(track);
+    shelves.push({track, update, stopMotion});
     update();
   });
 
@@ -1870,7 +1987,7 @@
       button.classList.toggle('active', selected);
       button.setAttribute('aria-pressed', String(selected));
     });
-    shelves.forEach(({track,update}) => { track.scrollLeft = 0; update(); });
+    shelves.forEach(({track,update,stopMotion}) => { stopMotion(); track.scrollTo({left:0, behavior:"instant"}); update(); });
   }
   function resetFilters() { search.value = ''; activeFilter = 'all'; applyFilters(); }
   search.addEventListener('input', applyFilters);
